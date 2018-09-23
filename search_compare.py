@@ -1,3 +1,4 @@
+#HOW TO: In terminal type 'python search_compare.py' to run program
 import timeit
 import random
 from timeit import Timer
@@ -62,7 +63,7 @@ def main():
     binary_search_iterative_list = []
     binary_search_recursive_list = []
 
-    def generate_lists_v2(total_lists,  list_length):
+    def generate_lists(total_lists,  list_length):
         input_lists = [random.sample(range(list_length), list_length) for x in range(total_lists)]
 
         for input_list in input_lists:
@@ -70,7 +71,7 @@ def main():
             sequential_search_results = sequential_search_timer.timeit(number=1)
             sequential_search_list.append(sequential_search_results)
 
-            input_lists.sort()
+            input_list.sort()
             ordered_sequential_search_timer = Timer(lambda: ordered_sequential_search(input_list, -1))
             ordered_sequential_search_results = ordered_sequential_search_timer.timeit(number=1)
             ordered_sequential_search_list.append(ordered_sequential_search_results)
@@ -95,9 +96,10 @@ def main():
         print("Binary Search Iterative, for a list size of %s took %10.7f seconds to run, on average"% (list_length, binary_search_iterative_average))
         print("Binary Search Recursive, for a list size of %s took %10.7f seconds to run, on average"% (list_length, binary_search_recursive_average))
 
-    generate_lists_v2(100, 500)
-    generate_lists_v2(100, 1000)
-    generate_lists_v2(100, 10000)
+    generate_lists(100, 500)
+    generate_lists(100, 1000)
+    generate_lists(100, 10000)
+
 
 
 if __name__ == '__main__':

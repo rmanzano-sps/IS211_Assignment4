@@ -1,8 +1,7 @@
-import time
-import random
+import timeit
+from timeit import Timer
 
 def sequential_search(a_list, item):
-    start = time.time()
     pos = 0
     found = False
     while pos < len(a_list) and not found:
@@ -10,11 +9,9 @@ def sequential_search(a_list, item):
             found = True
         else:
             pos = pos+1
-    end = time.time()
-    return found, end
+    return found
 
 def ordered_sequential_search(a_list, item):
-    start = time.time()
     pos = 0
     found = False
     stop = False
@@ -26,11 +23,9 @@ def ordered_sequential_search(a_list, item):
                  stop = True
              else:
                  pos = pos+1
-    end = time.time()
-    return found, end
+    return found
 
 def binary_search_iterative(a_list, item):
-    start = time.time()
     first = 0
     last = len(a_list) - 1
     found = False
@@ -43,12 +38,10 @@ def binary_search_iterative(a_list, item):
                 last = midpoint - 1
             else:
                 first = midpoint + 1
-    end = time.time()
-    return found, end
+    return found
 
 
 def binary_search_recursive(a_list, item):
-    start = time.time()
     if len(a_list) == 0:
        return False
     else:
@@ -57,11 +50,9 @@ def binary_search_recursive(a_list, item):
             return True
         else:
             if item < a_list[midpoint]:
-                end = time.time()
-                return binary_search_recursive(a_list[:midpoint], item), end
+                return binary_search_recursive(a_list[:midpoint], item)
             else:
-                end = time.time()
-                return binary_search_recursive(a_list[midpoint + 1:], item), end
+                return binary_search_recursive(a_list[midpoint + 1:], item)
 
 
 def main():
@@ -72,17 +63,21 @@ def main():
     for x in xrange(100):
         five_hundered_input = [range(1,500) for i in list(range(500))]
 
-        sequential_search_results = sequential_search(five_hundered_input, -1)
-        sequential_search_list.append(sequential_search_results[1])
+        sequential_search_timer = Timer(lambda: sequential_search(five_hundered_input, -1))
+        sequential_search_results = sequential_search_timer.timeit(number=1)
+        sequential_search_list.append(sequential_search_results)
 
-        ordered_sequential_search_results = ordered_sequential_search(five_hundered_input, -1)
-        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+        ordered_sequential_search_timer = Timer(lambda: ordered_sequential_search(five_hundered_input, -1))
+        ordered_sequential_search_results = ordered_sequential_search_timer.timeit(number=1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results)
 
-        binary_search_iterative_results = binary_search_iterative(five_hundered_input, -1)
-        binary_search_iterative_list.append(binary_search_iterative_results[1])
+        binary_search_iterative_timer = Timer(lambda: binary_search_iterative(five_hundered_input, -1))
+        binary_search_iterative_results = binary_search_iterative_timer.timeit(number=1)
+        binary_search_iterative_list.append(binary_search_iterative_results)
 
-        binary_search_recursive_results = binary_search_recursive(five_hundered_input, -1)
-        binary_search_recursive_list.append(binary_search_recursive_results[1])
+        binary_search_recursive_timer = Timer(lambda: binary_search_recursive(five_hundered_input, -1))
+        binary_search_recursive_results = binary_search_recursive_timer.timeit(number=1)
+        binary_search_recursive_list.append(binary_search_recursive_results)
 
     sequential_search_five_hundred_average = sum(sequential_search_list)/len(five_hundered_input)
     ordered_sequential_search_five_hundered_average = sum(ordered_sequential_search_list)/len(five_hundered_input)
@@ -103,22 +98,27 @@ def main():
     for x in xrange(100):
         thousand_input = [range(1,1000) for i in list(range(1000))]
 
-        sequential_search_results = sequential_search(thousand_input, -1)
-        sequential_search_list.append(sequential_search_results[1])
+        sequential_search_timer = Timer(lambda: sequential_search(thousand_input, -1))
+        sequential_search_results = sequential_search_timer.timeit(number=1)
+        sequential_search_list.append(sequential_search_results)
 
-        ordered_sequential_search_results = ordered_sequential_search(thousand_input, -1)
-        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+        ordered_sequential_search_timer = Timer(lambda: ordered_sequential_search(thousand_input, -1))
+        ordered_sequential_search_results = ordered_sequential_search_timer.timeit(number=1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results)
 
-        binary_search_iterative_results = binary_search_iterative(thousand_input, -1)
-        binary_search_iterative_list.append(binary_search_iterative_results[1])
+        binary_search_iterative_timer = Timer(lambda: binary_search_iterative(thousand_input, -1))
+        binary_search_iterative_results = binary_search_iterative_timer.timeit(number=1)
+        binary_search_iterative_list.append(binary_search_iterative_results)
 
-        binary_search_recursive_results = binary_search_recursive(thousand_input, -1)
-        binary_search_recursive_list.append(binary_search_recursive_results[1])
+        binary_search_recursive_timer = Timer(lambda: binary_search_recursive(thousand_input, -1))
+        binary_search_recursive_results = binary_search_recursive_timer.timeit(number=1)
+        binary_search_recursive_list.append(binary_search_recursive_results)
 
     sequential_search_results_thousand_average = sum(sequential_search_list)/len(thousand_input)
     ordered_sequential_search_thousand_average = sum(ordered_sequential_search_list)/len(thousand_input)
     binary_search_iterative_thousand_average = sum(binary_search_iterative_list)/len(thousand_input)
     binary_search_recursive_thousand_average = sum(binary_search_recursive_list)/len(thousand_input)
+    
     print("Sequential Search for a list size of 1000 took %10.7f seconds to run, on average"% sequential_search_results_thousand_average)
     print("Ordered Sequential Search for a list size of 1000 took %10.7f seconds to run, on average"% ordered_sequential_search_thousand_average)
     print("Binary Search Iterative for a list size of 1000 took %10.7f seconds to run, on average"% binary_search_iterative_thousand_average)
@@ -133,23 +133,27 @@ def main():
     for x in xrange(100):
         ten_thousand_input = [range(1,10000) for i in list(range(10000))]
 
-        sequential_search_results = sequential_search(ten_thousand_input, -1)
-        sequential_search_list.append(sequential_search_results[1])
+        sequential_search_timer = Timer(lambda: sequential_search(ten_thousand_input, -1))
+        sequential_search_results = sequential_search_timer.timeit(number=1)
+        sequential_search_list.append(sequential_search_results)
 
-        ordered_sequential_search_results = ordered_sequential_search(ten_thousand_input, -1)
-        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+        ordered_sequential_search_timer = Timer(lambda: ordered_sequential_search(ten_thousand_input, -1))
+        ordered_sequential_search_results = ordered_sequential_search_timer.timeit(number=1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results)
 
-        binary_search_iterative_results = binary_search_iterative(ten_thousand_input, -1)
-        binary_search_iterative_list.append(binary_search_iterative_results[1])
+        binary_search_iterative_timer = Timer(lambda: binary_search_iterative(ten_thousand_input, -1))
+        binary_search_iterative_results = binary_search_iterative_timer.timeit(number=1)
+        binary_search_iterative_list.append(binary_search_iterative_results)
 
-        binary_search_recursive_results = binary_search_recursive(ten_thousand_input, -1)
-        binary_search_recursive_list.append(binary_search_recursive_results[1])
+        binary_search_recursive_timer = Timer(lambda: binary_search_recursive(ten_thousand_input, -1))
+        binary_search_recursive_results = binary_search_recursive_timer.timeit(number=1)
+        binary_search_recursive_list.append(binary_search_recursive_results)
 
     sequential_search_results_ten_thousand_average = sum(sequential_search_list)/len(ten_thousand_input)
     ordered_sequential_search_ten_thousand_average = sum(ordered_sequential_search_list)/len(ten_thousand_input)
     binary_search_iterative_ten_thousand_average = sum(binary_search_iterative_list)/len(ten_thousand_input)
     binary_search_recursive_ten_thousand_average = sum(binary_search_recursive_list)/len(ten_thousand_input)
-    #
+
     print("Sequential Search for a list size of 10000 took %10.7f seconds to run, on average"% sequential_search_results_ten_thousand_average)
     print("Ordered Sequential Search for a list size of 10000 took %10.7f seconds to run, on average"% ordered_sequential_search_ten_thousand_average)
     print("Binary Search Iterative for a list size of 10000 took %10.7f seconds to run, on average"% binary_search_iterative_ten_thousand_average)

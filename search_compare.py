@@ -2,6 +2,7 @@ import time
 import random
 
 def sequential_search(a_list, item):
+    start = time.time()
     pos = 0
     found = False
     while pos < len(a_list) and not found:
@@ -9,44 +10,151 @@ def sequential_search(a_list, item):
             found = True
         else:
             pos = pos+1
-    return found
+    end = time.time()
+    return found, end
 
-def ordered_sequential_search(test_list, num):
+def ordered_sequential_search(a_list, item):
     start = time.time()
-    test_list.sort()
+    pos = 0
+    found = False
+    stop = False
+    while pos < len(a_list) and not found and not stop:
+        if a_list[pos] == item:
+            found = True
+        else:
+             if a_list[pos] > item:
+                 stop = True
+             else:
+                 pos = pos+1
+    end = time.time()
+    return found, end
 
-    results = sequential_search(test_list, num)
-    end_time = time.time()
+def binary_search_iterative(a_list, item):
+    start = time.time()
+    first = 0
+    last = len(a_list) - 1
+    found = False
+    while first <= last and not found:
+        midpoint = (first + last) // 2
+        if a_list[midpoint] == item:
+            found = True
+        else:
+            if item < a_list[midpoint]:
+                last = midpoint - 1
+            else:
+                first = midpoint + 1
+    end = time.time()
+    return found, end
 
-    return results, end_time
 
+def binary_search_recursive(a_list, item):
+    start = time.time()
+    if len(a_list) == 0:
+       return False
+    else:
+        midpoint = len(a_list) // 2
+        if a_list[midpoint] == item:
+            return True
+        else:
+            if item < a_list[midpoint]:
+                end = time.time()
+                return binary_search_recursive(a_list[:midpoint], item), end
+            else:
+                end = time.time()
+                return binary_search_recursive(a_list[midpoint + 1:], item), end
 
-def binary_search_iterative():
-    pass
-
-def binary_search_recursive():
-    pass
 
 def main():
-    for x in xrange(1):
-        five_hundered_input = [random.randrange(1,500) for i in list(range(500))]
-        five_hundred_results = ordered_sequential_search(five_hundered_input, -1)
-        print(five_hundered_input, x)
-        # print(five_hundred_results[1], x)
-    # for x in range (1000):
-    #     thousand_input = [random.randrange(1, 101) for i in list(range(100))]
-    #     ordered_sequential_search(thousand_input)
+    sequential_search_list = []
+    ordered_sequential_search_list = []
+    binary_search_iterative_list = []
+    binary_search_recursive_list = []
+    for x in xrange(100):
+        five_hundered_input = [range(1,500) for i in list(range(500))]
+
+        sequential_search_results = sequential_search(five_hundered_input, -1)
+        sequential_search_list.append(sequential_search_results[1])
+
+        ordered_sequential_search_results = ordered_sequential_search(five_hundered_input, -1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+
+        binary_search_iterative_results = binary_search_iterative(five_hundered_input, -1)
+        binary_search_iterative_list.append(binary_search_iterative_results[1])
+
+        binary_search_recursive_results = binary_search_recursive(five_hundered_input, -1)
+        binary_search_recursive_list.append(binary_search_recursive_results[1])
+
+    sequential_search_five_hundred_average = sum(sequential_search_list)/len(five_hundered_input)
+    ordered_sequential_search_five_hundered_average = sum(ordered_sequential_search_list)/len(five_hundered_input)
+    binary_search_iterative_five_hundred_average = sum(binary_search_iterative_list)/len(five_hundered_input)
+    binary_search_recursive_five_hundred_average = sum(binary_search_recursive_list)/len(five_hundered_input)
+
+    print("Sequential Search for a list size of 500 took %10.7f seconds to run, on average"% sequential_search_five_hundred_average)
+    print("Ordered Sequential Search for a list size of 500 took %10.7f seconds to run, on average"% ordered_sequential_search_five_hundered_average)
+    print("Binary Search Iterative for a list size of 500 took %10.7f seconds to run, on average"% binary_search_iterative_five_hundred_average)
+    print("Binary Search Recursive for a list size of 500 took %10.7f seconds to run, on average"% binary_search_recursive_five_hundred_average)
+    print('Loading 1000 results......')
+
+    del sequential_search_list[:]
+    del ordered_sequential_search_list[:]
+    del binary_search_iterative_list[:]
+    del binary_search_recursive_list[:]
+
+    for x in xrange(100):
+        thousand_input = [range(1,1000) for i in list(range(1000))]
+
+        sequential_search_results = sequential_search(thousand_input, -1)
+        sequential_search_list.append(sequential_search_results[1])
+
+        ordered_sequential_search_results = ordered_sequential_search(thousand_input, -1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+
+        binary_search_iterative_results = binary_search_iterative(thousand_input, -1)
+        binary_search_iterative_list.append(binary_search_iterative_results[1])
+
+        binary_search_recursive_results = binary_search_recursive(thousand_input, -1)
+        binary_search_recursive_list.append(binary_search_recursive_results[1])
+
+    sequential_search_results_thousand_average = sum(sequential_search_list)/len(thousand_input)
+    ordered_sequential_search_thousand_average = sum(ordered_sequential_search_list)/len(thousand_input)
+    binary_search_iterative_thousand_average = sum(binary_search_iterative_list)/len(thousand_input)
+    binary_search_recursive_thousand_average = sum(binary_search_recursive_list)/len(thousand_input)
+    print("Sequential Search for a list size of 1000 took %10.7f seconds to run, on average"% sequential_search_results_thousand_average)
+    print("Ordered Sequential Search for a list size of 1000 took %10.7f seconds to run, on average"% ordered_sequential_search_thousand_average)
+    print("Binary Search Iterative for a list size of 1000 took %10.7f seconds to run, on average"% binary_search_iterative_thousand_average)
+    print("Binary Search Recursive for a list size of 1000 took %10.7f seconds to run, on average"% binary_search_recursive_thousand_average)
+    print('Loading 10000 results......')
+
+    del sequential_search_list[:]
+    del ordered_sequential_search_list[:]
+    del binary_search_iterative_list[:]
+    del binary_search_recursive_list[:]
+
+    for x in xrange(100):
+        ten_thousand_input = [range(1,10000) for i in list(range(10000))]
+
+        sequential_search_results = sequential_search(ten_thousand_input, -1)
+        sequential_search_list.append(sequential_search_results[1])
+
+        ordered_sequential_search_results = ordered_sequential_search(ten_thousand_input, -1)
+        ordered_sequential_search_list.append(ordered_sequential_search_results[1])
+
+        binary_search_iterative_results = binary_search_iterative(ten_thousand_input, -1)
+        binary_search_iterative_list.append(binary_search_iterative_results[1])
+
+        binary_search_recursive_results = binary_search_recursive(ten_thousand_input, -1)
+        binary_search_recursive_list.append(binary_search_recursive_results[1])
+
+    sequential_search_results_ten_thousand_average = sum(sequential_search_list)/len(ten_thousand_input)
+    ordered_sequential_search_ten_thousand_average = sum(ordered_sequential_search_list)/len(ten_thousand_input)
+    binary_search_iterative_ten_thousand_average = sum(binary_search_iterative_list)/len(ten_thousand_input)
+    binary_search_recursive_ten_thousand_average = sum(binary_search_recursive_list)/len(ten_thousand_input)
     #
-    # for x in range (10000):
-    #     ten_thousand_input = [random.randrange(1, 101) for i in list(range(100))]
-    #     ordered_sequential_search(ten_thousand_input)
+    print("Sequential Search for a list size of 10000 took %10.7f seconds to run, on average"% sequential_search_results_ten_thousand_average)
+    print("Ordered Sequential Search for a list size of 10000 took %10.7f seconds to run, on average"% ordered_sequential_search_ten_thousand_average)
+    print("Binary Search Iterative for a list size of 10000 took %10.7f seconds to run, on average"% binary_search_iterative_ten_thousand_average)
+    print("Binary Search Recursive for a list size of 10000 took %10.7f seconds to run, on average"% binary_search_recursive_ten_thousand_average)
+
 
 if __name__ == '__main__':
     main()
-
-
-#
-# test_list = [1, 2, 32, 8, 17, 19, 42, 13, 0]
-# print(ordered_sequential_search(test_list, 3))
-# print(ordered_sequential_search(test_list, 13))
-#
